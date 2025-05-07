@@ -1,20 +1,33 @@
 const { gql } = require("apollo-server-express");
 
 const typeDefs = gql`
-  type Transaction {
+  type Account {
     id: ID!
-    user_id: Int!
-    type: String!
+    name: String
+    email: String
+  }
+
+  type Transaction {
+    transaction_id: ID!
+    account_id: Int!
     amount: Float!
-    created_at: String!
+    type: String!
+    timestamp: String!
+    user: Account
   }
 
   type Query {
-    getTransactionsByUser(user_id: Int!): [Transaction]
+    # Requête pour récupérer les transactions avec des filtres (par compte, type, date, etc.)
+    transactions(
+      accountId: Int
+      type: String
+      startDate: String
+      endDate: String
+    ): [Transaction]
   }
 
   type Mutation {
-    addTransaction(user_id: Int!, type: String!, amount: Float!): Transaction
+    addTransaction(account_id: Int!, type: String!, amount: Float!): Transaction
   }
 `;
 
