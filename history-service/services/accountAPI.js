@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-const ACCOUNT_SERVICE_BASE_URL = "http://localhost:3000"; // Port du service REST
+const ACCOUNT_SERVICE_BASE_URL = "http://localhost:3000";
 
 const getAccountById = async (id) => {
   try {

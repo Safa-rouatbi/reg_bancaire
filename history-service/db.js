@@ -1,11 +1,10 @@
-// db.js
-const mysql = require("mysql2");
+const mysql = require("mysql2/promise");
 
 const pool = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "safa", // Remplace par ton mot de passe MySQL si besoin
-  database: "banking_db", // Assure-toi que cette base existe
+  password: "",
+  database: "finance_system"
 });
 
 module.exports = pool;

@@ -4,7 +4,6 @@ const { getAccountById } = require("../services/accountAPI");
 const resolvers = {
   Transaction: {
     user: async (parent) => {
-      // parent.account_id provient de la transaction
       return await getAccountById(parent.account_id);
     },
   },
