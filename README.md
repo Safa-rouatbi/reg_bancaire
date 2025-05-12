@@ -1,3 +1,4 @@
+projet-reglement-interbancaire.md
 # Service de Règlement Interbancaire en Temps Réel
 
 Ce projet implémente un système de règlement interbancaire avec quatre microservices backend :  
@@ -14,7 +15,6 @@ L'architecture repose sur des microservices indépendants qui communiquent entre
 
    - **Microservice Comptes (REST)** : Gestion des comptes bancaires (CRUD).
    - **Microservice Historique (GraphQL)** : Consultation de l’historique des transactions.
-
    - **Microservice Transactions (gRPC)** : Création et validation des transactions.
    - **Microservice Notifications (Kafka)** : Publication des notifications des transactions.
 
@@ -122,43 +122,51 @@ L'architecture repose sur des microservices indépendants qui communiquent entre
 
 ---
 
-## 3. Documentation des Microservices
+## 3. Cas d’usage principaux (User Stories)
 
-### 3.1 **Microservice Transactions (gRPC)**
+Cette section décrit les principales interactions entre les utilisateurs et le système. Chaque cas d’usage illustre un scénario réaliste que ce système permet de gérer.
 
-- **Fichier** : `docs/transactions-gRPC.md`
-- **Contenu** :
-    - Schéma des transactions
-    - Fichier Proto gRPC
-    - Exemples de requêtes et réponses
-    - Instructions de déploiement
+### 3.1 **Création de compte bancaire**
 
-### 3.2 **Microservice Notifications (Kafka)**
+**Acteur** : Client ou administrateur de la banque  
+**Pré-condition** : L'utilisateur possède les informations nécessaires (nom, banque, solde initial)  
+**Scénario** :
+- Le client envoie une requête POST via l’API REST.
+- Le microservice Comptes enregistre le compte en base de données.
+- Une confirmation est retournée avec l’identifiant du compte.
 
-- **Fichier** : `docs/notifications-kafka.md`
-- **Contenu** :
-    - Structure des messages Kafka
-    - Configuration du topic `transaction-notifications`
-    - Exemples de messages
-    - Instructions pour Kafka
+---
 
-### 3.3 **Microservice Comptes (REST)**
+### 3.2 **Initiation et validation d'une transaction**
 
-- **Fichier** : `docs/accounts-rest.md`
-- **Contenu** :
-    - Schéma des comptes
-    - Endpoints REST disponibles
-    - Exemples de requêtes et réponses
-    - Instructions de déploiement
+**Acteur** : Client initiant un transfert d'argent  
+**Pré-condition** : Le compte émetteur existe et dispose d’un solde suffisant  
+**Scénario** :
+- L’utilisateur envoie une requête de transaction.
+- Le microservice Transactions (gRPC) vérifie les soldes et crée une transaction.
+- Si valide, les soldes sont mis à jour et la transaction est enregistrée.
+- Un message est publié sur Kafka pour notifier du résultat.
 
-### 3.4 **Microservice Historique (GraphQL)**
+---
 
-- **Fichier** : `docs/history-graphql.md`
-- **Contenu** :
-    - Schéma des transactions dans l'historique
-    - Requêtes et mutations GraphQL disponibles
-    - Exemples de requêtes et réponses
-    - Instructions de déploiement
+### 3.3 **Consultation de l’historique des transactions**
+
+**Acteur** : Client ou administrateur  
+**Pré-condition** : Le compte cible existe  
+**Scénario** :
+- L’utilisateur effectue une requête GraphQL en fournissant un identifiant de compte.
+- Le microservice Historique retourne les transactions.
+
+---
+
+### 3.4 **Réception de notification en temps réel**
+
+**Acteur** : Système tiers (abonné Kafka) ou utilisateur final  
+**Pré-condition** : Une transaction a été initiée ou complétée  
+**Scénario** :
+- Le microservice Notifications publie un message sur le topic Kafka `transaction-notifications`.
+- Un système abonné (ex : une interface web ou une appli mobile) reçoit les mises à jour instantanément.
+- L’utilisateur est informé du succès ou de l’échec de sa transaction.
 
 ---
 
@@ -171,10 +179,9 @@ L'architecture repose sur des microservices indépendants qui communiquent entre
 - **GraphQL** : Pour la gestion des requêtes d'historique des transactions.
 - **Postman** : Pour tester les API REST.
 
-
 ---
 
 ## 6. Conclusion
 
 Ce projet simule un système de règlement interbancaire en temps réel, utilisant des microservices pour gérer les comptes, l'historique des transactions, les transactions elles-mêmes, ainsi que les notifications des événements de transaction via Kafka. Il est conçu pour être scalable et extensible pour répondre aux besoins d'un système de paiement moderne.
-
+EOF
