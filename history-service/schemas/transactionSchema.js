@@ -17,7 +17,6 @@ const typeDefs = gql`
   }
 
   type Query {
-    # Requête pour récupérer les transactions avec des filtres (par compte, type, date, etc.)
     transactions(
       accountId: Int
       type: String

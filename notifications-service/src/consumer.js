@@ -9,7 +9,7 @@ async function consumeTransactionEvents() {
     await consumer.connect();
     await consumer.subscribe({ topic: kafkaTopic, fromBeginning: true });
 
-    console.log("📢 Consumer Kafka en attente d'événements...");
+    console.log("Consumer Kafka en attente d'événements...");
 
     await consumer.run({
         eachMessage: async ({ message }) => {
